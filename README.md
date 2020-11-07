@@ -22,11 +22,11 @@ sorting. Search technologies need to be discussed.
  
 ##4. Add/update communication
 
-You need to make 2 standard REST API methods for the 1st entity: get_or_create/update
+You need to make 2 standard REST API methods for the 1st entity: `get_or_create/update`
 
 ##5. Update logic/create a social network
 
-You need to make 2 standard REST API methods for the 1st entity: get_or_create/update
+You need to make 2 standard REST API methods for the 1st entity: `get_or_create/update`
 
 ##6. Required fields
 
