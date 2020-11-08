@@ -31,7 +31,7 @@ class UserController
 
     /**
      * @return JsonResponse
-     * @Route ("/users", name="get_all_users", methods={"GET"})
+     * @Route ("/users/", name="get_all_users", methods={"GET"})
      */
     public function getAll(): JsonResponse
     {
