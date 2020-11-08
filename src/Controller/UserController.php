@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController
 {
-    private $userRepository;
+    private UserRepository $userRepository;
 
     /**
      * UserController constructor.
@@ -52,7 +52,9 @@ class UserController
         } else {
             $this->userRepository->saveUser($firstName, $lastName, $email);
 
-            return new JsonResponse(['status' => 'Customer created!'], Response::HTTP_CREATED);
+            return new JsonResponse(['status' => 'User created!'], Response::HTTP_CREATED);
         }
     }
+
+
 }
