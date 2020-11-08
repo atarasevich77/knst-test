@@ -18,7 +18,7 @@ class UserRepository extends ServiceEntityRepository
     /**
      * @var EntityManagerInterface
      */
-    private $manager;
+    private EntityManagerInterface $manager;
 
     /**
      * UserRepository constructor.
@@ -36,7 +36,7 @@ class UserRepository extends ServiceEntityRepository
      * @param string $lastName
      * @param string $email
      */
-    public function saveUser(string $firstName, string $lastName, string $email): void
+    public function createUser(string $firstName, string $lastName, string $email): void
     {
         $user = new User();
 
@@ -46,5 +46,17 @@ class UserRepository extends ServiceEntityRepository
 
         $this->manager->persist($user);
         $this->manager->flush();
+    }
+
+    /**
+     * @param User $user
+     * @return User
+     */
+    public function updateUser(User $user): User
+    {
+        $this->manager->persist($user);
+        $this->manager->flush();
+
+        return $user;
     }
 }

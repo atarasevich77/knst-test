@@ -9,8 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Class UserController
+ * @package App\Controller
+ */
 class UserController
 {
+    /**
+     * @var UserRepository
+     */
     private UserRepository $userRepository;
 
     /**
@@ -50,12 +57,29 @@ class UserController
             return new JsonResponse($data, Response::HTTP_OK);
 
         } else {
-            $this->userRepository->saveUser($firstName, $lastName, $email);
+            $this->userRepository->createUser($firstName, $lastName, $email);
 
             return new JsonResponse(['status' => 'User created!'], Response::HTTP_CREATED);
         }
     }
 
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     * @Route ("/users/{id}", name="update_user", methods={"PUT"})
+     */
+    public function update(int $id, Request $request): JsonResponse
+    {
+        $user = $this->userRepository->findOneBy(['id' => $id]);
+        $data = json_decode($request->getContent(), true);
 
+        empty($data['firstName']) ? true : $user->setFirstName($data['firstName']);
+        empty($data['lastName']) ? true : $user->setFirstName($data['lastName']);
+        empty($data['email']) ? true : $user->setFirstName($data['email']);
+
+        $updatedUser = $this->userRepository->updateUser($user);
+        return new JsonResponse($updatedUser->toArray(), Response::HTTP_OK);
+    }
 
 }
