@@ -31,7 +31,7 @@ class UserController
 
     /**
      * @return JsonResponse
-     * @Route ("/users/", name="get_all_users", methods={"GET"})
+     * @Route ("/users", name="get_all_users", methods={"GET"})
      */
     public function getAll(): JsonResponse
     {
@@ -53,7 +53,7 @@ class UserController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/users/", name="get_or_create_user", methods={"POST"})
+     * @Route ("/users", name="get_or_create_user", methods={"POST"})
      */
     public function getOrCreate(Request $request): JsonResponse
     {
