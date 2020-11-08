@@ -2,9 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
@@ -17,28 +14,28 @@ class User
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", length=150)
      */
-    private $firstName;
+    private string $firstName;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", length=150)
      */
-    private $lastName;
+    private string $lastName;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", length=150, unique=true)
      */
-    private $email;
+    private string $email;
 
     /**
      * @return int|null
