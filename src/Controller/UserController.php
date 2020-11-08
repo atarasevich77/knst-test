@@ -30,11 +30,32 @@ class UserController
     }
 
     /**
+     * @return JsonResponse
+     * @Route ("/users", name="get_all_users", methods={"GET"})
+     */
+    public function getAll(): JsonResponse
+    {
+        $users = $this->userRepository->findAll();
+        $data = [];
+
+        foreach ($users as $user) {
+            $data[] = [
+                'id' => $user->getId(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'email' => $user->getEmail(),
+            ];
+        }
+
+        return new JsonResponse($data, Response::HTTP_OK);
+    }
+    
+    /**
      * @param Request $request
      * @return JsonResponse
      * @Route ("/users/", name="get_or_create_user", methods={"POST"})
      */
-    public function get_or_create(Request $request): JsonResponse
+    public function getOrCreate(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
