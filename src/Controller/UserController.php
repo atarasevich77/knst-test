@@ -32,7 +32,7 @@ class UserController extends AbstractController
 
     /**
      * @return JsonResponse
-     * @Route("/api/users", methods={"GET"})
+     * @Route ("/api/users", methods={"GET"})
      */
     public function getAll(): JsonResponse
     {
