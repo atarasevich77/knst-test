@@ -1,6 +1,3 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-app_api:
-  resource: "@Controller/Api"
-  type:     annotation

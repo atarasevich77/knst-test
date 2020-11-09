@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Controller;
+namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -32,7 +32,7 @@ class UserController extends AbstractController
 
     /**
      * @return JsonResponse
-     * @Route ("/api/users", methods=({"GET"}))
+     * @Route("/api/users", methods={"GET"})
      */
     public function getAll(): JsonResponse
     {
@@ -53,11 +53,10 @@ class UserController extends AbstractController
 
     /**
      * @param int $id
-     * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users/{id}", methods=({"GET"}))
+     * @Route ("/api/users/{id}", methods={"GET"})
      */
-    public function getById(int $id, Request $request): JsonResponse
+    public function getById(int $id): JsonResponse
     {
         $users = $this->userRepository->findOneBy(['id' => $id]);
         $data = [
@@ -72,7 +71,7 @@ class UserController extends AbstractController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users", methods=({"POST"}, {"GET"}))
+     * @Route ("/api/users", methods={"POST", "GET"})
      */
     public function create(Request $request): JsonResponse
     {
@@ -108,7 +107,7 @@ class UserController extends AbstractController
      * @param int $id
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users/{id}", methods=({"PUT"}))
+     * @Route ("/api/users/{id}", methods={"PUT"})
      */
     public function update(int $id, Request $request): JsonResponse
     {
@@ -126,7 +125,7 @@ class UserController extends AbstractController
     /**
      * @param int $id
      * @return JsonResponse
-     * @Route ("/api/users/{id}", methods=({"DELETE"}))
+     * @Route ("/api/users/{id}", methods={"DELETE"})
      */
     public function delete(int $id): JsonResponse
     {
