@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Api\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -31,7 +31,7 @@ class UserController
 
     /**
      * @return JsonResponse
-     * @Route ("/users", name="get_all_users", methods={"GET"})
+     * @Route ("/api/users", name="get_all_users", methods={"GET"})
      */
     public function getAll(): JsonResponse
     {
@@ -53,9 +53,9 @@ class UserController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/users", name="get_or_create_user", methods={"POST"})
+     * @Route ("/api/users", name="get_or_create_user", methods={"POST"})
      */
-    public function getOrCreate(Request $request): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -89,7 +89,7 @@ class UserController
      * @param int $id
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/users/{id}", name="update_user", methods={"PUT"})
+     * @Route ("/api/users/{id}", name="update_user", methods={"PUT"})
      */
     public function update(int $id, Request $request): JsonResponse
     {
