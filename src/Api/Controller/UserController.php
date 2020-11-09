@@ -4,6 +4,8 @@ namespace App\Api\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Class UserController
  * @package App\Controller
  */
-class UserController
+class UserController extends AbstractController
 {
     /**
      * @var UserRepository
@@ -30,8 +32,7 @@ class UserController
 
     /**
      * @return JsonResponse
-     * @Route ("/api/users")
-     * @Method ({"GET"})
+     * @Route ("/api/users", methods=({"GET"}))
      */
     public function getAll(): JsonResponse
     {
@@ -54,8 +55,7 @@ class UserController
      * @param int $id
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users/{id}")
-     * @Method ({"GET"})
+     * @Route ("/api/users/{id}", methods=({"GET"}))
      */
     public function getById(int $id, Request $request): JsonResponse
     {
@@ -72,8 +72,7 @@ class UserController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users")
-     * @Method ({"POST"})
+     * @Route ("/api/users", methods=({"POST"}, {"GET"}))
      */
     public function create(Request $request): JsonResponse
     {
@@ -109,8 +108,7 @@ class UserController
      * @param int $id
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users/{id}")
-     * @Method ({"PUT"})
+     * @Route ("/api/users/{id}", methods=({"PUT"}))
      */
     public function update(int $id, Request $request): JsonResponse
     {
@@ -128,8 +126,7 @@ class UserController
     /**
      * @param int $id
      * @return JsonResponse
-     * @Route ("/api/users/{id}")
-     * @Method ({"DELETE"})
+     * @Route ("/api/users/{id}", methods=({"DELETE"}))
      */
     public function delete(int $id): JsonResponse
     {
