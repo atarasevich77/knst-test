@@ -4,7 +4,6 @@ namespace App\Api\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +30,8 @@ class UserController
 
     /**
      * @return JsonResponse
-     * @Route ("/api/users", name="get_all_users", methods={"GET"})
+     * @Route ("/api/users")
+     * @Method ({"GET"})
      */
     public function getAll(): JsonResponse
     {
@@ -49,11 +49,31 @@ class UserController
 
         return new JsonResponse($data, Response::HTTP_OK);
     }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     * @Route ("/api/users/{id}")
+     * @Method ({"GET"})
+     */
+    public function getById(int $id, Request $request): JsonResponse
+    {
+        $users = $this->userRepository->findOneBy(['id' => $id]);
+        $data = [
+            'id' => $users->getId(),
+            'firstName' => $users->getFirstName(),
+            'lastName' => $users->getLastName(),
+            'email' => $users->getEmail(),
+        ];
+        return new JsonResponse($data, Response::HTTP_OK);
+    }
     
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users", name="get_or_create_user", methods={"POST"})
+     * @Route ("/api/users")
+     * @Method ({"POST"})
      */
     public function create(Request $request): JsonResponse
     {
@@ -89,7 +109,8 @@ class UserController
      * @param int $id
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users/{id}", name="update_user", methods={"PUT"})
+     * @Route ("/api/users/{id}")
+     * @Method ({"PUT"})
      */
     public function update(int $id, Request $request): JsonResponse
     {
@@ -104,4 +125,17 @@ class UserController
         return new JsonResponse($updatedUser->toArray(), Response::HTTP_OK);
     }
 
+    /**
+     * @param int $id
+     * @return JsonResponse
+     * @Route ("/api/users/{id}")
+     * @Method ({"DELETE"})
+     */
+    public function delete(int $id): JsonResponse
+    {
+        $user = $this->userRepository->findOneBy(['id' => $id]);
+        $this->userRepository->removeUser($user);
+
+        return new JsonResponse(['status' => 'User deleted'], Response::HTTP_NO_CONTENT);
+    }
 }

@@ -59,4 +59,13 @@ class UserRepository extends ServiceEntityRepository
 
         return $user;
     }
+
+    /**
+     * @param User $user
+     */
+    public function removeUser(User $user): void
+    {
+        $this->manager->remove($user);
+        $this->manager->flush();
+    }
 }
