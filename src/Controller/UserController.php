@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -71,7 +70,7 @@ class UserController extends AbstractController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users", methods={"POST", "GET"})
+     * @Route ("/api/users", methods={"POST"})
      */
     public function create(Request $request): JsonResponse
     {
@@ -84,23 +83,9 @@ class UserController extends AbstractController
         if (empty($firstName) || empty($lastName) || empty($email)) {
             throw new NotFoundHttpException('Expecting mandatory parameters!');
         }
+        $this->userRepository->createUser($firstName, $lastName, $email);
 
-        $user = $this->userRepository->findOneBy(['email' => $email]);
-        if ($user instanceof User) {
-            $data = [
-                'id' => $user->getId(),
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-                'email' => $user->getEmail(),
-            ];
-
-            return new JsonResponse($data, Response::HTTP_OK);
-
-        } else {
-            $this->userRepository->createUser($firstName, $lastName, $email);
-
-            return new JsonResponse(['status' => 'User created!'], Response::HTTP_CREATED);
-        }
+        return new JsonResponse(['status' => 'User created!'], Response::HTTP_CREATED);
     }
 
     /**
