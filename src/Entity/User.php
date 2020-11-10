@@ -13,7 +13,7 @@ class User
      * @var int
      *
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private int $id;
@@ -104,7 +104,7 @@ class User
     /**
      * @return array
      */
-    public function toArray(): array
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->getId(),

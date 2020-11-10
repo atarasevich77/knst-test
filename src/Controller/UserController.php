@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Class UserController
  * @package App\Controller
+ * @Route("/api", name="user_api")
  */
 class UserController extends AbstractController
 {
@@ -31,9 +32,9 @@ class UserController extends AbstractController
 
     /**
      * @return JsonResponse
-     * @Route ("/api/users", methods={"GET"})
+     * @Route ("/users", name="users", methods={"GET"})
      */
-    public function getAll(): JsonResponse
+    public function getUsers(): JsonResponse
     {
         $users = $this->userRepository->findAll();
         $data = [];
@@ -53,26 +54,34 @@ class UserController extends AbstractController
     /**
      * @param int $id
      * @return JsonResponse
-     * @Route ("/api/users/{id}", methods={"GET"})
+     * @Route ("/users/{id}", name="users_get", methods={"GET"})
      */
-    public function getById(int $id): JsonResponse
+    public function getUserById(int $id): JsonResponse
     {
-        $users = $this->userRepository->findOneBy(['id' => $id]);
-        $data = [
-            'id' => $users->getId(),
-            'firstName' => $users->getFirstName(),
-            'lastName' => $users->getLastName(),
-            'email' => $users->getEmail(),
-        ];
-        return new JsonResponse($data, Response::HTTP_OK);
+        $user = $this->userRepository->find($id);
+
+        if(!$user) {
+            $data = [
+                'status' => 'User not found',
+            ];
+            return new JsonResponse($data, Response::HTTP_NOT_FOUND);
+        } else {
+            $data = [
+                'id' => $user->getId(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'email' => $user->getEmail(),
+            ];
+            return new JsonResponse($data, Response::HTTP_OK);
+        }
     }
-    
+
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users", methods={"POST"})
+     * @Route ("/users", name="users_post", methods={"POST"})
      */
-    public function create(Request $request): JsonResponse
+    public function addUser(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -85,38 +94,45 @@ class UserController extends AbstractController
         }
         $this->userRepository->createUser($firstName, $lastName, $email);
 
-        return new JsonResponse(['status' => 'User created!'], Response::HTTP_CREATED);
+        return new JsonResponse(['status' => 'User has been created!'], Response::HTTP_CREATED);
     }
 
     /**
      * @param int $id
      * @param Request $request
      * @return JsonResponse
-     * @Route ("/api/users/{id}", methods={"PUT"})
+     * @Route ("/users/{id}", name="users_put", methods={"PUT"})
      */
-    public function update(int $id, Request $request): JsonResponse
+    public function updateUser(int $id, Request $request): JsonResponse
     {
-        $user = $this->userRepository->findOneBy(['id' => $id]);
-        $data = json_decode($request->getContent(), true);
+        $user = $this->userRepository->find($id);
+        if(!$user) {
+            return new JsonResponse(['status' => 'User not found'], Response::HTTP_NOT_FOUND);
+        } else {
+            $data = json_decode($request->getContent(), true);
 
-        empty($data['firstName']) ? true : $user->setFirstName($data['firstName']);
-        empty($data['lastName']) ? true : $user->setFirstName($data['lastName']);
-        empty($data['email']) ? true : $user->setFirstName($data['email']);
+            empty($data['firstName']) ? true : $user->setFirstName($data['firstName']);
+            empty($data['lastName']) ? true : $user->setFirstName($data['lastName']);
+            empty($data['email']) ? true : $user->setFirstName($data['email']);
 
-        $updatedUser = $this->userRepository->updateUser($user);
-        return new JsonResponse($updatedUser->toArray(), Response::HTTP_OK);
+            $updatedUser = $this->userRepository->updateUser($user);
+            return new JsonResponse($updatedUser->jsonSerialize(), Response::HTTP_OK);
+        }
     }
 
     /**
      * @param int $id
      * @return JsonResponse
-     * @Route ("/api/users/{id}", methods={"DELETE"})
+     * @Route ("/users/{id}", name="users_delete", methods={"DELETE"})
      */
     public function delete(int $id): JsonResponse
     {
-        $user = $this->userRepository->findOneBy(['id' => $id]);
-        $this->userRepository->removeUser($user);
-
-        return new JsonResponse(['status' => 'User deleted'], Response::HTTP_NO_CONTENT);
+        $user = $this->userRepository->find($id);
+        if(!$user) {
+            return new JsonResponse(['status' => 'User not found'], Response::HTTP_NOT_FOUND);
+        } else {
+            $this->userRepository->removeUser($user);
+            return new JsonResponse(['status' => 'User deleted'], Response::HTTP_NO_CONTENT);
+        }
     }
 }
