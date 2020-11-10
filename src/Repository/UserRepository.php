@@ -30,42 +30,42 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
         $this->manager = $manager;
     }
-//
-//    /**
-//     * @param string $firstName
-//     * @param string $lastName
-//     * @param string $email
-//     */
-//    public function createUser(string $firstName, string $lastName, string $email): void
-//    {
-//        $user = new User();
-//
-//        $user->setFirstName($firstName)
-//            ->setLastName($lastName)
-//            ->setEmail($email);
-//
-//        $this->manager->persist($user);
-//        $this->manager->flush();
-//    }
-//
-//    /**
-//     * @param User $user
-//     * @return User
-//     */
-//    public function updateUser(User $user): User
-//    {
-//        $this->manager->persist($user);
-//        $this->manager->flush();
-//
-//        return $user;
-//    }
-//
-//    /**
-//     * @param User $user
-//     */
-//    public function removeUser(User $user): void
-//    {
-//        $this->manager->remove($user);
-//        $this->manager->flush();
-//    }
+
+    /**
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $email
+     */
+    public function createUser(string $firstName, string $lastName, string $email): void
+    {
+        $user = new User();
+
+        $user->setFirstName($firstName)
+            ->setLastName($lastName)
+            ->setEmail($email);
+
+        $this->manager->persist($user);
+        $this->manager->flush();
+    }
+
+    /**
+     * @param User $user
+     * @return User
+     */
+    public function updateUser(User $user): User
+    {
+        $this->manager->persist($user);
+        $this->manager->flush();
+
+        return $user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function removeUser(User $user): void
+    {
+        $this->manager->remove($user);
+        $this->manager->flush();
+    }
 }
