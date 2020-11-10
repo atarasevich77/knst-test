@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Class UserController
  * @package App\Controller
- * @Route("/api", name="user_api")
+ * @Route("/api", name="users_api")
  */
 class UserController extends AbstractController
 {
