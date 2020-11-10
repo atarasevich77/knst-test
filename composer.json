@@ -24,7 +24,8 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "fzaninotto/faker": "^1.9",
-        "symfony/maker-bundle": "^1.23"
+        "symfony/maker-bundle": "^1.23",
+        "symfony/web-server-bundle": "4.4.2"
     },
     "config": {
         "optimize-autoloader": true,
