@@ -112,8 +112,8 @@ class UserController extends AbstractController
             $data = json_decode($request->getContent(), true);
 
             empty($data['firstName']) ? true : $user->setFirstName($data['firstName']);
-            empty($data['lastName']) ? true : $user->setFirstName($data['lastName']);
-            empty($data['email']) ? true : $user->setFirstName($data['email']);
+            empty($data['lastName']) ? true : $user->setLastName($data['lastName']);
+            empty($data['email']) ? true : $user->setEmail($data['email']);
 
             $updatedUser = $this->userRepository->updateUser($user);
             return new JsonResponse($updatedUser->jsonSerialize(), Response::HTTP_OK);
