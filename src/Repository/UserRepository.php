@@ -35,8 +35,9 @@ class UserRepository extends ServiceEntityRepository
      * @param string $firstName
      * @param string $lastName
      * @param string $email
+     * @return User
      */
-    public function createUser(string $firstName, string $lastName, string $email): void
+    public function createUser(string $firstName, string $lastName, string $email): User
     {
         $user = new User();
 
@@ -46,6 +47,8 @@ class UserRepository extends ServiceEntityRepository
 
         $this->manager->persist($user);
         $this->manager->flush();
+
+        return $user;
     }
 
     /**

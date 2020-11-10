@@ -62,7 +62,8 @@ class UserController extends AbstractController
 
         if(!$user) {
             $data = [
-                'status' => 'User not found',
+                'errors' => 404,
+                'status' => "User no valid",
             ];
             return new JsonResponse($data, Response::HTTP_NOT_FOUND);
         } else {
@@ -83,18 +84,26 @@ class UserController extends AbstractController
      */
     public function addUser(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        try {
+            $data = json_decode($request->getContent(), true);
 
-        $firstName = $data['firstName'];
-        $lastName = $data['lastName'];
-        $email = $data['email'];
+            $firstName = $data['firstName'];
+            $lastName = $data['lastName'];
+            $email = $data['email'];
 
-        if (empty($firstName) || empty($lastName) || empty($email)) {
-            throw new NotFoundHttpException('Expecting mandatory parameters!');
+            if (empty($firstName) || empty($lastName) || empty($email)) {
+                throw new NotFoundHttpException('Expecting mandatory parameters!');
+            }
+            $newUser = $this->userRepository->createUser($firstName, $lastName, $email);
+
+            return new JsonResponse($newUser->jsonSerialize(), Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 422,
+                'errors' => "Data no valid",
+            ];
+            return new JsonResponse($data, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-        $this->userRepository->createUser($firstName, $lastName, $email);
-
-        return new JsonResponse(['status' => 'User has been created!'], Response::HTTP_CREATED);
     }
 
     /**
@@ -107,7 +116,11 @@ class UserController extends AbstractController
     {
         $user = $this->userRepository->find($id);
         if(!$user) {
-            return new JsonResponse(['status' => 'User not found'], Response::HTTP_NOT_FOUND);
+            $data = [
+                'status' => 404,
+                'errors' => "User not found",
+            ];
+            return new JsonResponse($data, Response::HTTP_NOT_FOUND);
         } else {
             $data = json_decode($request->getContent(), true);
 
@@ -129,10 +142,18 @@ class UserController extends AbstractController
     {
         $user = $this->userRepository->find($id);
         if(!$user) {
-            return new JsonResponse(['status' => 'User not found'], Response::HTTP_NOT_FOUND);
+            $data = [
+                'status' => 404,
+                'errors' => "User not found",
+            ];
+            return new JsonResponse($data, Response::HTTP_NOT_FOUND);
         } else {
             $this->userRepository->removeUser($user);
-            return new JsonResponse(['status' => 'User deleted'], Response::HTTP_NO_CONTENT);
+            $data = [
+                'status' => 204,
+                'errors' => "User has been deleted",
+            ];
+            return new JsonResponse($data, Response::HTTP_NO_CONTENT);
         }
     }
 }
