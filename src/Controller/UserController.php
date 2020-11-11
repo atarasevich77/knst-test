@@ -48,7 +48,7 @@ class UserController extends AbstractController
             ];
         }
 
-        return new JsonResponse($data, Response::HTTP_OK);
+        return $this->response($data);
     }
 
     /**
@@ -62,10 +62,10 @@ class UserController extends AbstractController
 
         if(!$user) {
             $data = [
-                'errors' => 404,
+                'errors' => Response::HTTP_NOT_FOUND,
                 'status' => "User no valid",
             ];
-            return new JsonResponse($data, Response::HTTP_NOT_FOUND);
+            return $this->response($data, Response::HTTP_NOT_FOUND);
         } else {
             $data = [
                 'id' => $user->getId(),
@@ -73,7 +73,7 @@ class UserController extends AbstractController
                 'lastName' => $user->getLastName(),
                 'email' => $user->getEmail(),
             ];
-            return new JsonResponse($data, Response::HTTP_OK);
+            return $this->response($data);
         }
     }
 
@@ -96,13 +96,13 @@ class UserController extends AbstractController
             }
             $newUser = $this->userRepository->createUser($firstName, $lastName, $email);
 
-            return new JsonResponse($newUser->jsonSerialize(), Response::HTTP_CREATED);
+            return $this->response($newUser->jsonSerialize());
         } catch (\Exception $e) {
             $data = [
-                'status' => 422,
+                'status' => Response::HTTP_UNPROCESSABLE_ENTITY,
                 'errors' => "Data no valid",
             ];
-            return new JsonResponse($data, Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->response($data, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 
@@ -117,10 +117,10 @@ class UserController extends AbstractController
         $user = $this->userRepository->find($id);
         if(!$user) {
             $data = [
-                'status' => 404,
+                'status' => Response::HTTP_NOT_FOUND,
                 'errors' => "User not found",
             ];
-            return new JsonResponse($data, Response::HTTP_NOT_FOUND);
+            return $this->response($data, Response::HTTP_NOT_FOUND);
         } else {
             $data = json_decode($request->getContent(), true);
 
@@ -129,7 +129,7 @@ class UserController extends AbstractController
             empty($data['email']) ? true : $user->setEmail($data['email']);
 
             $updatedUser = $this->userRepository->updateUser($user);
-            return new JsonResponse($updatedUser->jsonSerialize(), Response::HTTP_OK);
+            return $this->response($updatedUser->jsonSerialize());
         }
     }
 
@@ -143,17 +143,30 @@ class UserController extends AbstractController
         $user = $this->userRepository->find($id);
         if(!$user) {
             $data = [
-                'status' => 404,
+                'status' => Response::HTTP_NOT_FOUND,
                 'errors' => "User not found",
             ];
-            return new JsonResponse($data, Response::HTTP_NOT_FOUND);
+            return $this->response($data, Response::HTTP_NOT_FOUND);
         } else {
             $this->userRepository->removeUser($user);
             $data = [
-                'status' => 204,
+                'status' => Response::HTTP_OK,
                 'errors' => "User has been deleted",
             ];
-            return new JsonResponse($data, Response::HTTP_NO_CONTENT);
+            return $this->response($data);
         }
+    }
+
+    /**
+     * Returns a JSON response
+     *
+     * @param array $data
+     * @param int $status
+     * @param array $headers
+     * @return JsonResponse
+     */
+    public function response(array $data, $status = Response::HTTP_OK, $headers = []): JsonResponse
+    {
+        return new JsonResponse($data, $status, $headers);
     }
 }
