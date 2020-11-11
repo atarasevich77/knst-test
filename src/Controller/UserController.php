@@ -158,8 +158,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * Returns a JSON response
-     *
      * @param array $data
      * @param int $status
      * @param array $headers
