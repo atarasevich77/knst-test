@@ -142,17 +142,11 @@ class UserController extends AbstractController
     {
         $user = $this->userRepository->find($id);
         if(!$user) {
-            $data = [
-                'status' => Response::HTTP_NOT_FOUND,
-                'errors' => "User not found",
-            ];
+            $data = $this->setErrors(Response::HTTP_NOT_FOUND, "User not found");
             return $this->response($data, Response::HTTP_NOT_FOUND);
         } else {
             $this->userRepository->removeUser($user);
-            $data = [
-                'status' => Response::HTTP_OK,
-                'errors' => "User has been deleted",
-            ];
+            $data = $this->setErrors(Response::HTTP_OK, "User has been deleted");
             return $this->response($data);
         }
     }
@@ -166,5 +160,18 @@ class UserController extends AbstractController
     public function response(array $data, $status = Response::HTTP_OK, $headers = []): JsonResponse
     {
         return new JsonResponse($data, $status, $headers);
+    }
+
+    /**
+     * @param $errors
+     * @param $status
+     * @return array
+     */
+    public function setErrors($errors, $status): array
+    {
+        return [
+            'status' => $errors,
+            'errors' => $status,
+        ];
     }
 }
