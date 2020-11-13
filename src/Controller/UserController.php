@@ -154,15 +154,15 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param $errors
      * @param $status
+     * @param $errors
      * @return array
      */
-    public function serializeErrors($errors, $status): array
+    public function serializeErrors($status, $errors): array
     {
         return [
-            'status' => $errors,
-            'errors' => $status,
+            'status' => $status,
+            'errors' => $errors,
         ];
     }
 }
