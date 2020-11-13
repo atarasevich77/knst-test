@@ -61,10 +61,7 @@ class UserController extends AbstractController
         $user = $this->userRepository->find($id);
 
         if(!$user) {
-            $data = [
-                'errors' => Response::HTTP_NOT_FOUND,
-                'status' => "User no valid",
-            ];
+            $data = $this->setErrors(Response::HTTP_NOT_FOUND, "User no valid");
             return $this->response($data, Response::HTTP_NOT_FOUND);
         } else {
             $data = [
