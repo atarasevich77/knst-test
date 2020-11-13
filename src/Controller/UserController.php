@@ -61,7 +61,7 @@ class UserController extends AbstractController
         $user = $this->userRepository->find($id);
 
         if(!$user) {
-            $data = $this->setErrors(Response::HTTP_NOT_FOUND, "User no valid");
+            $data = $this->serializeErrors(Response::HTTP_NOT_FOUND, "User no valid");
             return $this->response($data, Response::HTTP_NOT_FOUND);
         } else {
             $data = [
@@ -95,7 +95,7 @@ class UserController extends AbstractController
 
             return $this->response($newUser->jsonSerialize());
         } catch (\Exception $e) {
-            $data = $this->setErrors(Response::HTTP_UNPROCESSABLE_ENTITY, "Data no valid");
+            $data = $this->serializeErrors(Response::HTTP_UNPROCESSABLE_ENTITY, "Data no valid");
             return $this->response($data, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
@@ -110,7 +110,7 @@ class UserController extends AbstractController
     {
         $user = $this->userRepository->find($id);
         if(!$user) {
-            $data = $this->setErrors(Response::HTTP_NOT_FOUND, "User not found");
+            $data = $this->serializeErrors(Response::HTTP_NOT_FOUND, "User not found");
             return $this->response($data, Response::HTTP_NOT_FOUND);
         } else {
             $data = json_decode($request->getContent(), true);
@@ -133,11 +133,11 @@ class UserController extends AbstractController
     {
         $user = $this->userRepository->find($id);
         if(!$user) {
-            $data = $this->setErrors(Response::HTTP_NOT_FOUND, "User not found");
+            $data = $this->serializeErrors(Response::HTTP_NOT_FOUND, "User not found");
             return $this->response($data, Response::HTTP_NOT_FOUND);
         } else {
             $this->userRepository->removeUser($user);
-            $data = $this->setErrors(Response::HTTP_OK, "User has been deleted");
+            $data = $this->serializeErrors(Response::HTTP_OK, "User has been deleted");
             return $this->response($data);
         }
     }
@@ -158,7 +158,7 @@ class UserController extends AbstractController
      * @param $status
      * @return array
      */
-    public function setErrors($errors, $status): array
+    public function serializeErrors($errors, $status): array
     {
         return [
             'status' => $errors,
