@@ -98,10 +98,7 @@ class UserController extends AbstractController
 
             return $this->response($newUser->jsonSerialize());
         } catch (\Exception $e) {
-            $data = [
-                'status' => Response::HTTP_UNPROCESSABLE_ENTITY,
-                'errors' => "Data no valid",
-            ];
+            $data = $this->setErrors(Response::HTTP_UNPROCESSABLE_ENTITY, "Data no valid");
             return $this->response($data, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
@@ -116,10 +113,7 @@ class UserController extends AbstractController
     {
         $user = $this->userRepository->find($id);
         if(!$user) {
-            $data = [
-                'status' => Response::HTTP_NOT_FOUND,
-                'errors' => "User not found",
-            ];
+            $data = $this->setErrors(Response::HTTP_NOT_FOUND, "User not found");
             return $this->response($data, Response::HTTP_NOT_FOUND);
         } else {
             $data = json_decode($request->getContent(), true);
